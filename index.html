@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gift Card - Bernardo | Purple Metrics</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;700;800;900&family=Bowlby+One+SC&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Boyrun';
+    src: url('Brandbook/Main Moodboard/Fonts/Boyrun.otf') format('opentype');
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --red: #ed475b;
+    --purple: #763899;
+    --blue: #0068de;
+    --off-white: #fff9ed;
+    --light-violet: #afaad2;
+    --light-blue: #a3bbd5;
+    --black: #000000;
+  }
+
+  html, body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: 'Public Sans', sans-serif;
+    color: var(--black);
+    min-height: 100vh;
+    background: var(--purple);
+    background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+
+  /* ===== TWO-TONE SPLIT ===== */
+  .split-top {
+    background-color: var(--blue);
+    background-image:
+      linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-size: 32px 32px;
+    padding: 48px 24px 160px;
+    text-align: center;
+  }
+
+  .split-bottom {
+    background-color: var(--purple);
+    background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-size: 18px 18px;
+    padding: 120px 24px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .anim { opacity: 0; animation: fadeInUp 0.7s ease-out forwards; }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.25s; }
+  .d3 { animation-delay: 0.4s; }
+  .d4 { animation-delay: 0.6s; }
+  .d5 { animation-delay: 0.8s; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* ===== CONFETTI ===== */
+  #confettiContainer {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 50; overflow: hidden;
+  }
+  .confetti { position: absolute; top: -10px; opacity: 0; }
+  .confetti.active { animation: confettiFall ease-out forwards; }
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ===== LOGO ===== */
+  .logo-header { margin-bottom: 32px; }
+  .logo-header img {
+    height: 56px;
+    filter: drop-shadow(0 6px 20px rgba(0,0,0,0.35));
+  }
+
+  /* ===== HEADLINE ===== */
+  .headline {
+    font-family: 'Bowlby One SC', sans-serif;
+    font-size: clamp(48px, 11vw, 90px);
+    line-height: 0.95;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+  }
+
+  /* ===== MESSAGE ===== */
+  .message {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(17px, 3vw, 23px);
+    line-height: 1.6;
+    color: rgba(255,255,255,0.88);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .message strong {
+    color: #fff;
+  }
+
+  /* ===== GIFT CARD — overlaps the split ===== */
+  .card-bridge {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    margin-top: -130px;
+    margin-bottom: -90px;
+    padding: 0 24px;
+  }
+
+  .card-scene {
+    perspective: 1200px;
+    width: 100%; max-width: 460px;
+    aspect-ratio: 1.6 / 1;
+    cursor: pointer;
+  }
+
+  .card-inner {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-inner.flipped { transform: rotateY(180deg); }
+
+  .card-front, .card-back {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden; overflow: hidden;
+    border-radius: 16px;
+  }
+
+  .card-front {
+    background: #FF385C;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 14px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .card-front img { width: 130px; filter: brightness(0) invert(1); }
+  .card-front-hint {
+    font-family: 'Boyrun', cursive;
+    font-size: 16px;
+    color: rgba(255,255,255,0.6);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .card-back {
+    transform: rotateY(180deg);
+    background: #FF385C;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 10px; padding: 28px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+  }
+
+  .card-amount {
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 900; font-size: 42px;
+    color: #fff; line-height: 1;
+  }
+  .card-sub {
+    font-size: 12px; color: rgba(255,255,255,0.6); margin-top: -2px;
+  }
+  .card-divider {
+    width: 40px; height: 3px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+  }
+
+  .code-nav {
+    display: flex; align-items: center;
+    gap: 8px; width: 100%; max-width: 360px;
+  }
+  .arrow-btn {
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.35);
+    background: transparent; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: #fff;
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  .arrow-btn:hover:not(:disabled) {
+    background: #fff; color: var(--purple); border-color: #fff;
+  }
+  .arrow-btn:disabled { opacity: 0.25; cursor: default; }
+
+  .gift-code {
+    flex: 1; text-align: center;
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 700;
+    font-size: clamp(11px, 2.5vw, 14px);
+    letter-spacing: 2px; color: #fff;
+    background: rgba(255,255,255,0.12);
+    padding: 9px 10px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.25);
+    user-select: all; word-break: break-all; min-width: 0;
+    transition: border-color 0.2s;
+  }
+  .gift-code:hover { border-color: #fff; }
+
+  .copy-btn {
+    background: #fff; color: var(--purple); border: none;
+    padding: 9px 24px; border-radius: 50px;
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 700; font-size: 12px;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .copy-btn:hover { background: var(--off-white); transform: scale(1.04); }
+  .copy-btn.copied { background: var(--blue); color: #fff; }
+
+  .card-counter { font-size: 11px; color: rgba(255,255,255,0.5); }
+
+  /* ===== STEPS ===== */
+  .steps-section {
+    max-width: 480px;
+    width: 100%;
+    margin-bottom: 40px;
+  }
+
+  .steps-label {
+    font-family: 'Boyrun', cursive;
+    font-size: clamp(18px, 3vw, 22px);
+    color: #fff;
+    margin-bottom: 18px;
+  }
+
+  .step {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .step:last-child { margin-bottom: 0; }
+
+  .step-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  .step-text {
+    font-family: 'Public Sans', sans-serif;
+    font-size: 15px; line-height: 1.6;
+    color: #fff;
+  }
+  .step-text a {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 700;
+  }
+
+  /* ===== SIGNATURE ===== */
+  .signature {
+    text-align: center;
+    margin-top: 36px;
+  }
+  .sign-line {
+    font-family: 'Boyrun', cursive;
+    font-size: clamp(20px, 4vw, 28px);
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 4px;
+  }
+  .sign-brand {
+    font-family: 'Public Sans', sans-serif;
+    font-weight: 900;
+    font-size: clamp(22px, 4.5vw, 32px);
+    color: #fff;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 680px) {
+    .split-top { padding: 36px 20px 130px; }
+    .split-bottom { padding: 100px 20px 48px; }
+    .headline { font-size: clamp(40px, 11vw, 68px); }
+    .card-bridge { margin-top: -110px; margin-bottom: -70px; }
+    .card-scene { max-width: 380px; }
+    .card-amount { font-size: 36px; }
+    .card-back { padding: 22px 16px; gap: 8px; }
+  }
+
+  @media (max-width: 420px) {
+    .split-top { padding: 28px 16px 110px; }
+    .split-bottom { padding: 80px 16px 40px; }
+    .headline { font-size: 36px; letter-spacing: -1px; }
+    .card-bridge { margin-top: -90px; margin-bottom: -50px; }
+    .card-scene { max-width: 300px; }
+    .card-amount { font-size: 30px; }
+    .card-back { padding: 16px 12px; gap: 6px; }
+    .copy-btn { padding: 8px 18px; font-size: 11px; }
+    .logo-header img { height: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Confetti -->
+<div id="confettiContainer"></div>
+
+<!-- ===== TOP: BLUE ===== -->
+<section class="split-top">
+  <div class="logo-header anim d1">
+    <img src="Brandbook/Ativo 16purple.png" alt="Purple Metrics">
+  </div>
+
+  <h1 class="headline anim d1">OBRIGADA,<br>BERNARDO!</h1>
+
+  <p class="message anim d2">
+    Você abriu a cabeça do nosso time de um jeito que a gente não esperava.
+    A sua aula foi <strong>transformadora!</strong>
+    Aproveita esse presente pra viver uma experiência incrível pelo Airbnb, você merece!
+  </p>
+</section>
+
+<!-- ===== GIFT CARD (overlaps both sections) ===== -->
+<div class="card-bridge anim d3">
+  <div class="card-scene" onclick="flipCard()">
+    <div class="card-inner" id="giftCard">
+      <div class="card-front">
+        <img src="Untitled design (16).png" alt="Airbnb Gift Card">
+        <span class="card-front-hint">clique para revelar</span>
+      </div>
+      <div class="card-back" onclick="event.stopPropagation()">
+        <div class="card-amount">R$ 2.500</div>
+        <div class="card-sub">5x de R$ 500</div>
+        <div class="card-divider"></div>
+        <div class="code-nav">
+          <button class="arrow-btn" id="prevBtn" onclick="changeCode(-1)">&#8592;</button>
+          <div class="gift-code" id="giftCode">CODIGO-1-AQUI</div>
+          <button class="arrow-btn" id="nextBtn" onclick="changeCode(1)">&#8594;</button>
+        </div>
+        <button class="copy-btn" id="copyBtn" onclick="copyCode()">
+          <span id="copyText">Copiar código</span>
+        </button>
+        <div class="card-counter" id="cardCounter">1/5</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BOTTOM: RED ===== -->
+<section class="split-bottom">
+
+  <div class="steps-section anim d4">
+    <p class="steps-label">como resgatar:</p>
+
+    <div class="step">
+      <span class="step-dot"></span>
+      <span class="step-text">Acesse <a href="https://airbnb.com.br/gift" target="_blank">airbnb.com.br/gift</a></span>
+    </div>
+    <div class="step">
+      <span class="step-dot"></span>
+      <span class="step-text">Faça login na sua conta do Airbnb (ou crie uma)</span>
+    </div>
+    <div class="step">
+      <span class="step-dot"></span>
+      <span class="step-text">Cole os códigos acima e pronto</span>
+    </div>
+    <div class="step">
+      <span class="step-dot"></span>
+      <span class="step-text">O saldo acumula na sua conta e fica salvo pra quando quiser reservar hospedagens ou experiências</span>
+    </div>
+  </div>
+
+  <div class="signature anim d5">
+    <p class="sign-line">com carinho,</p>
+    <p class="sign-brand">Purple Metrics</p>
+  </div>
+
+</section>
+
+<script>
+let isFlipped = false;
+let confettiTriggered = false;
+let currentCode = 0;
+
+const giftCodes = [
+  'CODIGO-1-AQUI',
+  'CODIGO-2-AQUI',
+  'CODIGO-3-AQUI',
+  'CODIGO-4-AQUI',
+  'CODIGO-5-AQUI'
+];
+
+function flipCard() {
+  const card = document.getElementById('giftCard');
+  isFlipped = !isFlipped;
+  card.classList.toggle('flipped');
+  if (isFlipped && !confettiTriggered) {
+    confettiTriggered = true;
+    launchConfetti();
+  }
+}
+
+function changeCode(dir) {
+  currentCode = Math.max(0, Math.min(giftCodes.length - 1, currentCode + dir));
+  document.getElementById('giftCode').textContent = giftCodes[currentCode];
+  document.getElementById('cardCounter').textContent = (currentCode + 1) + '/' + giftCodes.length;
+  document.getElementById('prevBtn').disabled = currentCode === 0;
+  document.getElementById('nextBtn').disabled = currentCode === giftCodes.length - 1;
+  const btn = document.getElementById('copyBtn');
+  const text = document.getElementById('copyText');
+  btn.classList.remove('copied');
+  text.textContent = 'Copiar código';
+}
+
+function copyCode() {
+  const code = document.getElementById('giftCode').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = document.getElementById('copyBtn');
+    const text = document.getElementById('copyText');
+    btn.classList.add('copied');
+    text.textContent = 'Copiado!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      text.textContent = 'Copiar código';
+    }, 2000);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => changeCode(0));
+
+function launchConfetti() {
+  const container = document.getElementById('confettiContainer');
+  const colors = ['#ed475b', '#763899', '#0068de', '#a3bbd5', '#afaad2', '#fff9ed'];
+  for (let i = 0; i < 1000; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = Math.random() * 100 + '%';
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.width = (Math.random() * 10 + 5) + 'px';
+    confetti.style.height = (Math.random() * 10 + 5) + 'px';
+    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    confetti.style.animationDelay = (Math.random() * 1) + 's';
+    confetti.style.animationDuration = (Math.random() * 1 + 1.2) + 's';
+    container.appendChild(confetti);
+    setTimeout(() => confetti.classList.add('active'), 10);
+    setTimeout(() => confetti.remove(), 4000);
+  }
+}
+</script>
+
+</body>
+</html>
